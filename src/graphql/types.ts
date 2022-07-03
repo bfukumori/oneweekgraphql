@@ -1,12 +1,15 @@
 import { GraphQLResolveInfo } from 'graphql';
 import { Cart as CartModel, CartItem as CartItemModel } from '@prisma/client';
-import { GraphQLContext } from './pages/api/index';
+import { GraphQLContext } from './context';
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
+const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -14,6 +17,16 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+};
+
+export type AddtoCartInput = {
+  cartId: Scalars['ID'];
+  description?: InputMaybe<Scalars['String']>;
+  id: Scalars['ID'];
+  image?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  price: Scalars['Int'];
+  quantity?: InputMaybe<Scalars['Int']>;
 };
 
 export type Cart = {
@@ -35,10 +48,48 @@ export type CartItem = {
   unitTotal: Money;
 };
 
+export type DecreaseCartItemInput = {
+  cartId: Scalars['ID'];
+  id: Scalars['ID'];
+};
+
+export type IncreaseCartItemInput = {
+  cartId: Scalars['ID'];
+  id: Scalars['ID'];
+};
+
 export type Money = {
   __typename?: 'Money';
   amount: Scalars['Int'];
   formatted: Scalars['String'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  addItem?: Maybe<Cart>;
+  decreaseCartItem?: Maybe<Cart>;
+  increaseCartItem?: Maybe<Cart>;
+  removeItem?: Maybe<Cart>;
+};
+
+
+export type MutationAddItemArgs = {
+  input: AddtoCartInput;
+};
+
+
+export type MutationDecreaseCartItemArgs = {
+  input: DecreaseCartItemInput;
+};
+
+
+export type MutationIncreaseCartItemArgs = {
+  input: IncreaseCartItemInput;
+};
+
+
+export type MutationRemoveItemArgs = {
+  input: RemoveFromCart;
 };
 
 export type Query = {
@@ -51,6 +102,79 @@ export type QueryCartArgs = {
   id: Scalars['ID'];
 };
 
+export type RemoveFromCart = {
+  cartId: Scalars['ID'];
+  id: Scalars['ID'];
+};
+
+export type CartFragment = { __typename?: 'Cart', id: string, totalItems: number, subTotal: { __typename?: 'Money', formatted: string }, items: Array<{ __typename?: 'CartItem', id: string, name: string, description?: string | null, image?: string | null, quantity: number, unitTotal: { __typename?: 'Money', formatted: string, amount: number }, lineTotal: { __typename?: 'Money', formatted: string, amount: number } }> };
+
+export type GetCartQueryVariables = Exact<{
+  cartId: Scalars['ID'];
+}>;
+
+
+export type GetCartQuery = { __typename?: 'Query', cart?: { __typename?: 'Cart', id: string, totalItems: number, subTotal: { __typename?: 'Money', formatted: string }, items: Array<{ __typename?: 'CartItem', id: string, name: string, description?: string | null, image?: string | null, quantity: number, unitTotal: { __typename?: 'Money', formatted: string, amount: number }, lineTotal: { __typename?: 'Money', formatted: string, amount: number } }> } | null };
+
+export const CartFragmentDoc = gql`
+    fragment Cart on Cart {
+  id
+  totalItems
+  subTotal {
+    formatted
+  }
+  items {
+    id
+    name
+    description
+    image
+    quantity
+    unitTotal {
+      formatted
+      amount
+    }
+    lineTotal {
+      formatted
+      amount
+    }
+  }
+}
+    `;
+export const GetCartDocument = gql`
+    query GetCart($cartId: ID!) {
+  cart(id: $cartId) {
+    ...Cart
+  }
+}
+    ${CartFragmentDoc}`;
+
+/**
+ * __useGetCartQuery__
+ *
+ * To run a query within a React component, call `useGetCartQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCartQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCartQuery({
+ *   variables: {
+ *      cartId: // value for 'cartId'
+ *   },
+ * });
+ */
+export function useGetCartQuery(baseOptions: Apollo.QueryHookOptions<GetCartQuery, GetCartQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCartQuery, GetCartQueryVariables>(GetCartDocument, options);
+      }
+export function useGetCartLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCartQuery, GetCartQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCartQuery, GetCartQueryVariables>(GetCartDocument, options);
+        }
+export type GetCartQueryHookResult = ReturnType<typeof useGetCartQuery>;
+export type GetCartLazyQueryHookResult = ReturnType<typeof useGetCartLazyQuery>;
+export type GetCartQueryResult = Apollo.QueryResult<GetCartQuery, GetCartQueryVariables>;
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -120,25 +244,35 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AddtoCartInput: AddtoCartInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Cart: ResolverTypeWrapper<CartModel>;
   CartItem: ResolverTypeWrapper<CartItemModel>;
+  DecreaseCartItemInput: DecreaseCartItemInput;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  IncreaseCartItemInput: IncreaseCartItemInput;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Money: ResolverTypeWrapper<Money>;
+  Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
+  RemoveFromCart: RemoveFromCart;
   String: ResolverTypeWrapper<Scalars['String']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AddtoCartInput: AddtoCartInput;
   Boolean: Scalars['Boolean'];
   Cart: CartModel;
   CartItem: CartItemModel;
+  DecreaseCartItemInput: DecreaseCartItemInput;
   ID: Scalars['ID'];
+  IncreaseCartItemInput: IncreaseCartItemInput;
   Int: Scalars['Int'];
   Money: Money;
+  Mutation: {};
   Query: {};
+  RemoveFromCart: RemoveFromCart;
   String: Scalars['String'];
 };
 
@@ -167,6 +301,13 @@ export type MoneyResolvers<ContextType = GraphQLContext, ParentType extends Reso
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addItem?: Resolver<Maybe<ResolversTypes['Cart']>, ParentType, ContextType, RequireFields<MutationAddItemArgs, 'input'>>;
+  decreaseCartItem?: Resolver<Maybe<ResolversTypes['Cart']>, ParentType, ContextType, RequireFields<MutationDecreaseCartItemArgs, 'input'>>;
+  increaseCartItem?: Resolver<Maybe<ResolversTypes['Cart']>, ParentType, ContextType, RequireFields<MutationIncreaseCartItemArgs, 'input'>>;
+  removeItem?: Resolver<Maybe<ResolversTypes['Cart']>, ParentType, ContextType, RequireFields<MutationRemoveItemArgs, 'input'>>;
+};
+
 export type QueryResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   cart?: Resolver<Maybe<ResolversTypes['Cart']>, ParentType, ContextType, RequireFields<QueryCartArgs, 'id'>>;
 };
@@ -175,6 +316,7 @@ export type Resolvers<ContextType = GraphQLContext> = {
   Cart?: CartResolvers<ContextType>;
   CartItem?: CartItemResolvers<ContextType>;
   Money?: MoneyResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };
 

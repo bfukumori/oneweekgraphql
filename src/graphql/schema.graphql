@@ -1,0 +1,57 @@
+type Query {
+  cart(id: ID!): Cart
+}
+
+type Mutation {
+  addItem(input: AddtoCartInput!): Cart
+  removeItem(input: RemoveFromCart!): Cart
+  increaseCartItem(input: IncreaseCartItemInput!): Cart
+  decreaseCartItem(input: DecreaseCartItemInput!): Cart
+}
+
+type Cart {
+  id: ID!
+  totalItems: Int!
+  items: [CartItem!]!
+  subTotal: Money!
+}
+
+type Money {
+  formatted: String!
+  amount: Int!
+}
+
+type CartItem {
+  id: ID!
+  name: String!
+  description: String
+  unitTotal: Money!
+  lineTotal: Money!
+  quantity: Int!
+  image: String
+}
+
+input AddtoCartInput {
+  id: ID!
+  name: String!
+  description: String
+  price: Int!
+  quantity: Int = 1
+  image: String
+  cartId: ID!
+}
+
+input RemoveFromCart {
+  id: ID!
+  cartId: ID!
+}
+
+input IncreaseCartItemInput {
+  id: ID!
+  cartId: ID!
+}
+
+input DecreaseCartItemInput {
+  id: ID!
+  cartId: ID!
+}
