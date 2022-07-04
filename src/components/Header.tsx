@@ -24,7 +24,7 @@ export function Header() {
         </a>
       </Link>
       <Link href="/Cart">
-        <a className="">
+        <a>
           <ShoppingCartIcon />
         </a>
       </Link>

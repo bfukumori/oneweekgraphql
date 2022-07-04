@@ -1,5 +1,8 @@
+import { ApolloError } from "apollo-server-micro";
 import currencyFormatter from "../helper/currencyFormatter";
+import { origin } from "../hooks/useClient";
 import { findOrCreateCart } from "../lib/cart";
+import { stripe } from "../lib/stripe";
 import { Resolvers } from "./types";
 
 export const resolvers: Resolvers = {
@@ -150,6 +153,54 @@ export const resolvers: Resolvers = {
         });
       }
       return findOrCreateCart(prisma, cartId);
+    },
+    createCheckoutSession: async (_, { input }, { prisma }) => {
+      const cart = await prisma.cart.findUnique({
+        where: {
+          id: input.cartId,
+        },
+      });
+      if (!cart) {
+        throw new ApolloError("Invalid cart");
+      }
+      const cartItems = await prisma.cart
+        .findUnique({
+          where: {
+            id: input.cartId,
+          },
+        })
+        .items();
+      if (!cartItems || cartItems.length === 0) {
+        throw new ApolloError("Cart is empty");
+      }
+      const line_items = cartItems.map((item) => {
+        return {
+          quantity: item.quantity,
+          price_data: {
+            currency: "usd",
+            unit_amount: item.price,
+            product_data: {
+              name: item.name,
+              description: item.description || undefined,
+              images: item.image ? [item.image] : [],
+            },
+          },
+        };
+      });
+      const session = await stripe.checkout.sessions.create({
+        success_url: `${origin}/thankyou?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin}/cart?cancelled=true`,
+        line_items,
+        metadata: {
+          cartId: cart.id,
+        },
+        mode: "payment",
+      });
+
+      return {
+        id: session.id,
+        url: session.url,
+      };
     },
   },
 };
