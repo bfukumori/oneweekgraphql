@@ -177,7 +177,7 @@ export const resolvers: Resolvers = {
       const line_items = validateCartItems(products, cartItems);
 
       const session = await stripe.checkout.sessions.create({
-        success_url: `${origin}/thankyou?session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `${origin}/Thankyou?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin}/cart?cancelled=true`,
         line_items,
         metadata: {
