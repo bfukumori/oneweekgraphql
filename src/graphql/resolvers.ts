@@ -1,7 +1,8 @@
 import { ApolloError } from "apollo-server-micro";
 import currencyFormatter from "../helper/currencyFormatter";
 import { origin } from "../hooks/useClient";
-import { findOrCreateCart } from "../lib/cart";
+import { findOrCreateCart, validateCartItems } from "../lib/cart";
+import { products } from "../lib/products";
 import { stripe } from "../lib/stripe";
 import { Resolvers } from "./types";
 
@@ -43,8 +44,8 @@ export const resolvers: Resolvers = {
       const formatted = currencyFormatter("en-US", "USD", amount);
 
       return {
-        amount,
         formatted,
+        amount,
       };
     },
   },
@@ -53,14 +54,14 @@ export const resolvers: Resolvers = {
       const amount = item.price;
       return {
         formatted: currencyFormatter("en-US", "USD", amount),
-        amount: item.price,
+        amount,
       };
     },
     lineTotal: (item) => {
       const amount = item.quantity * item.price;
       return {
         formatted: currencyFormatter("en-US", "USD", amount),
-        amount: item.price,
+        amount,
       };
     },
   },
@@ -173,20 +174,8 @@ export const resolvers: Resolvers = {
       if (!cartItems || cartItems.length === 0) {
         throw new ApolloError("Cart is empty");
       }
-      const line_items = cartItems.map((item) => {
-        return {
-          quantity: item.quantity,
-          price_data: {
-            currency: "usd",
-            unit_amount: item.price,
-            product_data: {
-              name: item.name,
-              description: item.description || undefined,
-              images: item.image ? [item.image] : [],
-            },
-          },
-        };
-      });
+      const line_items = validateCartItems(products, cartItems);
+
       const session = await stripe.checkout.sessions.create({
         success_url: `${origin}/thankyou?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin}/cart?cancelled=true`,
