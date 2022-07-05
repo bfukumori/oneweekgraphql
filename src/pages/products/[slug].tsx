@@ -21,7 +21,7 @@ export const getServerSideProps: GetServerSideProps<{
 const ProductPage: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ product }) => {
-  return <ProductDetail product={product} />;
+  return product && <ProductDetail product={product} />;
 };
 
 export default ProductPage;
