@@ -1,4 +1,4 @@
-mutation addToCart($input: AddToCartInput!) {
+mutation AddToCart($input: AddToCartInput!) {
   addItem(input: $input) {
     ...Cart
   }

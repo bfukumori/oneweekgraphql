@@ -1,0 +1,5 @@
+mutation IncreaseCartItem($input: IncreaseCartItemInput!) {
+  increaseCartItem(input: $input) {
+    ...Cart
+  }
+}

@@ -6,7 +6,7 @@ import { ProductItem } from "./ProductItem";
 
 export function ProductDetail({ product }: { product: Product }) {
   const cartId = getCookie("cartId") as string;
-  const [addToCart, { loading }] = useAddToCartMutation({
+  const [AddToCart, { loading }] = useAddToCartMutation({
     variables: {
       input: {
         cartId,
@@ -24,7 +24,7 @@ export function ProductDetail({ product }: { product: Product }) {
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    addToCart();
+    AddToCart();
   }
 
   return (
