@@ -26,11 +26,14 @@ export default cors(async function handler(req, res) {
     csrfPrevention: true,
     cache: "bounded",
   });
-
-  await apolloServer.start();
-  await apolloServer.createHandler({
-    path: "/api",
-  })(req, res);
+  try {
+    await apolloServer.start();
+    await apolloServer.createHandler({
+      path: "/api",
+    })(req, res);
+  } finally {
+    apolloServer.stop();
+  }
 });
 
 export const config = {

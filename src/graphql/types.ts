@@ -19,7 +19,7 @@ export type Scalars = {
   Float: number;
 };
 
-export type AddtoCartInput = {
+export type AddToCartInput = {
   cartId: Scalars['ID'];
   description?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -85,7 +85,7 @@ export type Mutation = {
 
 
 export type MutationAddItemArgs = {
-  input: AddtoCartInput;
+  input: AddToCartInput;
 };
 
 
@@ -123,6 +123,13 @@ export type RemoveFromCart = {
   id: Scalars['ID'];
 };
 
+export type AddToCartMutationVariables = Exact<{
+  input: AddToCartInput;
+}>;
+
+
+export type AddToCartMutation = { __typename?: 'Mutation', addItem?: { __typename?: 'Cart', id: string, totalItems: number, subTotal: { __typename?: 'Money', formatted: string }, items: Array<{ __typename?: 'CartItem', id: string, name: string, description?: string | null, image?: string | null, quantity: number, unitTotal: { __typename?: 'Money', formatted: string, amount: number }, lineTotal: { __typename?: 'Money', formatted: string, amount: number } }> } | null };
+
 export type CartFragment = { __typename?: 'Cart', id: string, totalItems: number, subTotal: { __typename?: 'Money', formatted: string }, items: Array<{ __typename?: 'CartItem', id: string, name: string, description?: string | null, image?: string | null, quantity: number, unitTotal: { __typename?: 'Money', formatted: string, amount: number }, lineTotal: { __typename?: 'Money', formatted: string, amount: number } }> };
 
 export type GetCartQueryVariables = Exact<{
@@ -156,6 +163,39 @@ export const CartFragmentDoc = gql`
   }
 }
     `;
+export const AddToCartDocument = gql`
+    mutation addToCart($input: AddToCartInput!) {
+  addItem(input: $input) {
+    ...Cart
+  }
+}
+    ${CartFragmentDoc}`;
+export type AddToCartMutationFn = Apollo.MutationFunction<AddToCartMutation, AddToCartMutationVariables>;
+
+/**
+ * __useAddToCartMutation__
+ *
+ * To run a mutation, you first call `useAddToCartMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddToCartMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addToCartMutation, { data, loading, error }] = useAddToCartMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddToCartMutation(baseOptions?: Apollo.MutationHookOptions<AddToCartMutation, AddToCartMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddToCartMutation, AddToCartMutationVariables>(AddToCartDocument, options);
+      }
+export type AddToCartMutationHookResult = ReturnType<typeof useAddToCartMutation>;
+export type AddToCartMutationResult = Apollo.MutationResult<AddToCartMutation>;
+export type AddToCartMutationOptions = Apollo.BaseMutationOptions<AddToCartMutation, AddToCartMutationVariables>;
 export const GetCartDocument = gql`
     query GetCart($cartId: ID!) {
   cart(id: $cartId) {
@@ -260,7 +300,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  AddtoCartInput: AddtoCartInput;
+  AddToCartInput: AddToCartInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Cart: ResolverTypeWrapper<CartModel>;
   CartItem: ResolverTypeWrapper<CartItemModel>;
@@ -279,7 +319,7 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  AddtoCartInput: AddtoCartInput;
+  AddToCartInput: AddToCartInput;
   Boolean: Scalars['Boolean'];
   Cart: CartModel;
   CartItem: CartItemModel;

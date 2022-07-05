@@ -3,7 +3,7 @@ type Query {
 }
 
 type Mutation {
-  addItem(input: AddtoCartInput!): Cart
+  addItem(input: AddToCartInput!): Cart
   removeItem(input: RemoveFromCart!): Cart
   increaseCartItem(input: IncreaseCartItemInput!): Cart
   decreaseCartItem(input: DecreaseCartItemInput!): Cart
@@ -37,7 +37,7 @@ type CheckoutSession {
   url: String
 }
 
-input AddtoCartInput {
+input AddToCartInput {
   id: ID!
   name: String!
   description: String
