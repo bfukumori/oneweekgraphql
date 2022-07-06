@@ -1,5 +1,5 @@
-query GetCart($cartId: ID!) {
-  cart(id: $cartId) {
+query GetCart($id: ID!) {
+  cart(id: $id) {
     ...Cart
   }
 }

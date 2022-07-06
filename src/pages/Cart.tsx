@@ -28,7 +28,7 @@ const Cart: NextPage<CartProps> = ({ cartId }) => {
   const router = useRouter();
   const { data } = useGetCartQuery({
     variables: {
-      cartId,
+      id: cartId,
     },
   });
   const [CreateCheckoutSession, { loading, error }] =
@@ -39,8 +39,8 @@ const Cart: NextPage<CartProps> = ({ cartId }) => {
         },
       },
       onCompleted(data) {
-        if (data.createCheckoutSession?.url) {
-          router.push(data.createCheckoutSession.url);
+        if (data?.createCheckoutSession?.url) {
+          router.push(data.createCheckoutSession?.url);
         }
       },
     });

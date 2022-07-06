@@ -7,14 +7,17 @@ import { useGetCartQuery } from "../graphql/types";
 import { stripe } from "../lib/stripe";
 
 interface ThankyouProps {
-  session: Stripe.Checkout.Session;
+  session: Stripe.Checkout.Session | null;
 }
 
 export const getServerSideProps: GetServerSideProps<ThankyouProps> = async ({
   query,
 }) => {
-  const sessionId = query.session_id as string;
-  const session = await stripe.checkout.sessions.retrieve(sessionId);
+  const sessionId = query.session_id;
+  const session =
+    typeof sessionId === "string"
+      ? await stripe.checkout.sessions.retrieve(sessionId)
+      : null;
   return {
     props: {
       session,
@@ -25,9 +28,9 @@ export const getServerSideProps: GetServerSideProps<ThankyouProps> = async ({
 const Thankyou: NextPage<ThankyouProps> = ({ session }) => {
   const { data } = useGetCartQuery({
     variables: {
-      cartId: session.metadata?.cartId!,
+      id: session?.metadata?.cartId!,
     },
-    skip: !session.metadata?.cartId,
+    skip: !session?.metadata?.cartId,
   });
   return (
     <main className="flex-1 grid grid-cols-2 mx-auto max-w-4xl space-y-8 min-h-full">

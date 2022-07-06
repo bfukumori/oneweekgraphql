@@ -1,6 +1,7 @@
 import Image from "next/image";
 import {
   CartItem,
+  GetCartDocument,
   useDecreaseCartItemMutation,
   useIncreaseCartItemMutation,
   useRemoveFromCartMutation,
@@ -26,6 +27,7 @@ export function CartItem({
           cartId,
         },
       },
+      refetchQueries: [GetCartDocument],
     });
   const [IncreaseCartItem, { loading: increasingCartItem }] =
     useIncreaseCartItemMutation({
@@ -35,6 +37,7 @@ export function CartItem({
           cartId,
         },
       },
+      refetchQueries: [GetCartDocument],
     });
 
   const [RemoveFromCart, { loading: removingFromCart }] =
@@ -45,6 +48,7 @@ export function CartItem({
           cartId,
         },
       },
+      refetchQueries: [GetCartDocument],
     });
 
   return (
@@ -58,7 +62,12 @@ export function CartItem({
           objectFit="cover"
         />
         <div className="flex justify-between items-baseline flex-1 gap-2">
-          <span className="text-lg">{item.name}</span>
+          <div>
+            <span className="text-lg">{item.name}</span>
+            <span className="text-sm font-light block">
+              Quantitity: {item.quantity}
+            </span>
+          </div>
           <span className="text-sm font-light">{item.unitTotal.formatted}</span>
         </div>
       </div>

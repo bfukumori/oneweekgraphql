@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import getRawBody from "raw-body";
+import Stripe from "stripe";
 import { stripe } from "../../lib/stripe";
 
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
+const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 export default async function Webhook(
   req: NextApiRequest,
@@ -23,7 +24,8 @@ export default async function Webhook(
     }
   }
   if (event?.type === "checkout.session.completed") {
-    const session = event.data.object;
+    const _session = event.data.object as Stripe.Checkout.Session;
+    console.log("Fulfilling order");
   }
   res.status(200).end();
 }

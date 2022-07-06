@@ -1,30 +1,26 @@
 import { getCookie } from "cookies-next";
-import { FormEvent } from "react";
-import { useAddToCartMutation } from "../graphql/types";
+
+import { GetCartDocument, useAddToCartMutation } from "../graphql/types";
 import { Product } from "../lib/products";
 import { ProductItem } from "./ProductItem";
 
-export function ProductDetail({ product }: { product: Product }) {
-  const cartId = getCookie("cartId") as string;
+export function ProductDetail({ product }: { product: Product | null }) {
+  const cartId = String(getCookie("cartId"));
   const [AddToCart, { loading }] = useAddToCartMutation({
     variables: {
       input: {
         cartId,
-        id: product.id,
-        name: product.title,
-        description: product.body,
-        price: product.price,
-        image: product.src,
+        id: product?.id!,
+        name: product?.title!,
+        description: product?.body,
+        price: product?.price!,
+        image: product?.src,
       },
     },
+    refetchQueries: [GetCartDocument],
   });
   if (!product) {
     return null;
-  }
-
-  function handleSubmit(event: FormEvent) {
-    event.preventDefault();
-    AddToCart();
   }
 
   return (
@@ -32,7 +28,12 @@ export function ProductDetail({ product }: { product: Product }) {
       <div className="col-span-3 flex items-center justify-center">
         <ProductItem product={product} />
       </div>
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          AddToCart();
+        }}
+      >
         <div className="p-8 space-y-4">
           <div dangerouslySetInnerHTML={{ __html: product.body }} />
           <button

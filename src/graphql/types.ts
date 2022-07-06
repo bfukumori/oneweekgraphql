@@ -161,7 +161,7 @@ export type RemoveFromCartMutation = { __typename?: 'Mutation', removeItem?: { _
 export type CartFragment = { __typename?: 'Cart', id: string, totalItems: number, subTotal: { __typename?: 'Money', formatted: string }, items: Array<{ __typename?: 'CartItem', id: string, name: string, description?: string | null, image?: string | null, quantity: number, unitTotal: { __typename?: 'Money', formatted: string, amount: number }, lineTotal: { __typename?: 'Money', formatted: string, amount: number } }> };
 
 export type GetCartQueryVariables = Exact<{
-  cartId: Scalars['ID'];
+  id: Scalars['ID'];
 }>;
 
 
@@ -358,8 +358,8 @@ export type RemoveFromCartMutationHookResult = ReturnType<typeof useRemoveFromCa
 export type RemoveFromCartMutationResult = Apollo.MutationResult<RemoveFromCartMutation>;
 export type RemoveFromCartMutationOptions = Apollo.BaseMutationOptions<RemoveFromCartMutation, RemoveFromCartMutationVariables>;
 export const GetCartDocument = gql`
-    query GetCart($cartId: ID!) {
-  cart(id: $cartId) {
+    query GetCart($id: ID!) {
+  cart(id: $id) {
     ...Cart
   }
 }
@@ -377,7 +377,7 @@ export const GetCartDocument = gql`
  * @example
  * const { data, loading, error } = useGetCartQuery({
  *   variables: {
- *      cartId: // value for 'cartId'
+ *      id: // value for 'id'
  *   },
  * });
  */
