@@ -1,34 +1,126 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+<p align="center">
+  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/bfukumori/oneweekgraphql?color=%2304D361">
 
-First, run the development server:
+  <img alt="Repository size" src="https://img.shields.io/github/repo-size/bfukumori/oneweekgraphql">
+ 
+  <a href="https://github.com/bfukumori/oneweekgraphql/commits/master">
+    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/bfukumori/oneweekgraphql">
+  </a>
+    
+   <img alt="License" src="https://img.shields.io/badge/license-MIT-brightgreen">
+   <a href="https://github.com/bfukumori/oneweekgraphql/stargazers">
+    <img alt="Stargazers" src="https://img.shields.io/github/stars/bfukumori/oneweekgraphql?style=social">
+  </a>
+
+  <a href="https://oneweekgraphql-xi.vercel.app/">
+    <img alt="oneweekgraphql" src="https://img.shields.io/badge/oneweekgraphql-%237159c1?style=flat&logo=ghost">
+  </a>
+</p>
+
+<h1 align="center">
+    <img alt="oneweekgraphql" title="#oneweekgraphql" src="./.github/logo.svg" />
+</h1>
+
+<p align="center">
+  <a href="#about">About</a> •
+  <a href="#features">Features</a> •
+  <a href="#how-it-works">How it works</a> • 
+  <a href="#tech-stack">Tech Stack</a> • 
+  <a href="#author">Author</a> • 
+  <a href="#user-content-license">License</a>
+</p>
+
+<div align="center"> 
+	<img alt="oneweekgraphql" title="#oneweekgraphql" src="./.github/banner.PNG" />
+</div>
+
+## About
+
+💡 oneweekgraphql - Fullstack eCommerce application using GraphQL.
+
+Project developed during the GrahphQL Course from [One Week GraphQL](https://oneweekgraphql.com/).
+
+---
+
+## Features
+
+- [x] Base layout
+- [x] Responsivity
+- [x] Add items to cart
+- [x] Remove items from cart
+- [x] Edit item quantity
+- [x] Checkout with stripe API
+- [x] Caching with Apollo Client
+- [x] Persisting cart state with database (MySQL) and Prisma context
+- [ ] Save order information to DB via webhooks
+- [ ] Store users in DB to avoid creating same customer each checkout in Stripe
+---
+
+## How it works
+
+### Pre-requisites
+
+Before you begin, you will need to have the following tools installed on your machine:
+[Git] (https://git-scm.com), [Node.js] (https://nodejs.org/en/).
+In addition, it is good to have an editor to work with the code like [VSCode] (https://code.visualstudio.com/)
+
+#### Running the web application
 
 ```bash
-npm run dev
-# or
-yarn dev
+
+# Clone this repository
+$ git clone git@github.com:bfukumori/oneweekgraphql.git
+
+# Access the project folder in your terminal
+$ cd oneweekgraphql
+
+# Install the dependencies
+$ npm install
+
+# Run the application in development mode
+$ npm run dev
+
+# The app will open on the port: 3000 - go to http://localhost:3000/
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+You`ll need to create an [Stripe] (https://stripe.com/) account to test payments and edit .env.example file with your secrets and database urls to make it works during development.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+The live version (https://oneweekgraphql-xi.vercel.app/) can be tested with a test card 4242 4242 4242 4242 (see more in https://stripe.com/docs/testing)
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+---
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Tech Stack
 
-## Learn More
+The following tools were used in the construction of the project:
 
-To learn more about Next.js, take a look at the following resources:
+#### **Application**  ([React](https://reactjs.org/)  +  [TypeScript](https://www.typescriptlang.org/))
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **[ApolloGraphQL](https://www.apollographql.com/)**
+- **[Prisma](https://www.prisma.io/)**
+- **[Stripe](https://stripe.com/)**
+- **[Next](https://nextjs.org/)**
+- **[Tailwindcss](https://tailwindcss.com/)**
+- **[Codegen](https://www.graphql-code-generator.com/)**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+---
+## Author
 
-## Deploy on Vercel
+<a href="https://www.facebook.com/bruno.fukumori.9/">
+ <img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/82473580?v=4" width="100px;" alt="Bruno Fukumori"/>
+ <br />
+  
+ <sub><b>Bruno Fukumori</b></sub></a> <a href="https://www.facebook.com/bruno.fukumori.9/" title="facebook"></a>
+ <br />
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+[![Twitter Badge](https://img.shields.io/badge/-Twitter-1ca0f1?style=flat-square&labelColor=1ca0f1&logo=twitter&logoColor=white&link=https://twitter.com/hi_fukujp)](https://twitter.com/hi_fukujp) [![Linkedin Badge](https://img.shields.io/badge/-Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/bfukumori/)](https://www.linkedin.com/in/bfukumori/) 
+[![Gmail Badge](https://img.shields.io/badge/-Gmail-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:brunofukumori@gmail.com)](mailto:brunofukumori@gmail.com)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+---
+
+## License
+
+This project is under the license [MIT](./LICENSE).
+
+---
