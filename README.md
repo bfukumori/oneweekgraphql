@@ -19,7 +19,7 @@
 </p>
 
 <h1 align="center">
-    <img alt="oneweekgraphql" title="#oneweekgraphql" src="./.github/logo.svg" />
+    <img alt="oneweekgraphql" title="#oneweekgraphql" src="./.github/logo.PNG" />
 </h1>
 
 <p align="center">
